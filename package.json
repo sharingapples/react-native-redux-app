@@ -1,0 +1,9 @@
+{
+  "name": "react-native-redux-app",
+  "version": "1.0.0",
+  "description": "Application router for react-native",
+  "main": "index.js",
+  "repository": "sharingapples/react-native-redux-app",
+  "author": "Ranjan Shrestha",
+  "license": "MIT"
+}
