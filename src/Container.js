@@ -1,6 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { View } from 'react-native';
 
+function extractComponent(path, routes) {
+  const name = path[0];
+  if (name && routes.paths[name]) {
+    return routes.paths[name].index;
+  }
+  return routes.index;
+}
+
 class Container extends Component {
   static contextTypes = {
     path: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -25,16 +33,8 @@ class Container extends Component {
     this.state = {
       path: context.path,
       routes: context.routes,
-      ChildComponent: this._extractComponent(context.path, context.routes),
+      ChildComponent: extractComponent(context.path, context.routes),
     };
-  }
-
-  _extractComponent(path, routes) {
-    const name = path[0];
-    if (name && routes.paths[name]) {
-      return routes.paths[name].index;
-    }
-    return routes.index;
   }
 
   getChildContext() {
@@ -71,10 +71,12 @@ class Container extends Component {
   }
 
   process(path, routes) {
-    const V = this._extractComponent(path, routes);
+    const V = extractComponent(path, routes);
     const childPath = path.slice();
     const name = childPath.shift();
-    const childRoutes = name && routes.paths[name] ? routes.paths[name] : { index: null, paths: null };
+    const childRoutes = name && routes.paths[name]
+            ? routes.paths[name]
+            : { index: null, paths: null };
 
     const oldContainer = this.container;
     this.setState({
